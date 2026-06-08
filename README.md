@@ -14,4 +14,4 @@ Features
 ✓ Chinese / English / Japanese
 
 Website
-https://你的帳號.github.io/NutriCalc/
+https://drwu827.github.io/NutriCalc/
