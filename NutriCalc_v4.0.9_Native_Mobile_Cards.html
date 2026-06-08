@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>NutriCalc v4.0.9 Native Mobile Cards Edition</title><style>
+*{box-sizing:border-box}body{font-family:Arial,'Noto Sans TC','Noto Sans JP',sans-serif;max-width:1100px;margin:auto;padding:12px;line-height:1.55;color:#222}h1{font-size:24px;margin:10px 0}.small{font-size:13px;color:#555}.card{border:1px solid #ddd;border-radius:10px;padding:14px;margin:12px 0;background:#fff}.disclaimer{background:#fff8e1;border-color:#f0d98c}.grid{display:grid;grid-template-columns:1fr;gap:8px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.field label{display:block;font-size:13px;color:#555;margin-bottom:4px}input,select,button,textarea{width:100%;padding:11px;border:1px solid #bbb;border-radius:8px;font-size:16px}button{background:#f2f2f2;cursor:pointer}.primary{background:#111;color:#fff}.donate-link{display:block;text-align:center;background:#111;color:#fff;text-decoration:none;padding:12px;border-radius:8px;font-weight:bold;border:0;width:100%;cursor:pointer}.range-row{margin:12px 0}.range-row input[type=range]{width:100%}.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}table{width:100%;border-collapse:collapse;margin-top:10px;table-layout:fixed;min-width:760px}th,td{border:1px solid #ccc;padding:8px;text-align:center;vertical-align:top;word-break:break-word}th{background:#f5f5f5}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.metric{background:#f7f7f7;border-radius:8px;padding:10px}.metric b{display:block;font-size:13px;color:#555}.metric span{font-size:20px;font-weight:bold}.warning{color:#b00020;font-weight:bold}.activity-definition p{margin:0 0 10px;line-height:1.6}details{margin:8px 0}summary{cursor:pointer;font-weight:bold}.collapsible-summary{font-size:1.1em;margin:0}.card>summary{list-style:none}.card>summary::-webkit-details-marker{display:none}.print-only{display:none}
+
+@media(max-width:719px){
+  .table-wrap{overflow-x:visible}
+  .table-wrap table{min-width:0!important;width:100%!important;table-layout:auto}
+  .table-wrap table.responsive-stack,
+  .table-wrap table.responsive-stack thead,
+  .table-wrap table.responsive-stack tbody,
+  .table-wrap table.responsive-stack tr,
+  .table-wrap table.responsive-stack th,
+  .table-wrap table.responsive-stack td{
+    display:block;
+    width:100%;
+  }
+  .table-wrap table.responsive-stack thead{display:none}
+  .table-wrap table.responsive-stack tr{
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin:10px 0;
+    padding:8px;
+    background:#fafafa;
+  }
+  .table-wrap table.responsive-stack th,
+  .table-wrap table.responsive-stack td{
+    border:0;
+    border-bottom:1px solid #eee;
+    padding:7px 4px;
+    text-align:left;
+  }
+  .table-wrap table.responsive-stack th:last-child,
+  .table-wrap table.responsive-stack td:last-child{border-bottom:0}
+  .table-wrap table.responsive-stack td::before{
+    content:attr(data-label) "：";
+    display:inline;
+    font-size:12px;
+    color:#666;
+    margin-right:4px;
+    font-weight:600;
+  }
+  .table-wrap table.responsive-stack th::before{
+    content:attr(data-label) "：";
+    display:inline;
+    font-size:12px;
+    color:#666;
+    margin-right:4px;
+    font-weight:600;
+  }
+}
+
+
+.macro-cards{display:none}
+.macro-card{border:1px solid #ddd;border-radius:10px;padding:12px;margin:10px 0;background:#fafafa}
+.macro-card h4{margin:0 0 8px;font-size:17px}
+.macro-row{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #eee;padding:7px 0}
+.macro-row:first-of-type{border-top:0}
+.macro-row b{font-weight:600}
+.macro-row span{text-align:right;font-weight:700}
+@media(max-width:719px){
+ .macro-table-wrap{display:none}
+ .macro-cards{display:block}
+}
+
+@media(max-width:719px){
+  .info-section table.responsive-stack tr:first-child,
+  .model-section table.responsive-stack tr:first-child,
+  .food-section table.responsive-stack tr:first-child{display:none}
+  .info-section table.responsive-stack tr td,
+  .model-section table.responsive-stack tr td,
+  .food-section table.responsive-stack tr td{
+    display:block;
+    font-weight:400;
+    font-size:14px;
+    border-bottom:1px solid #eee;
+  }
+  .info-section table.responsive-stack tr td::before,
+  .model-section table.responsive-stack tr td::before,
+  .food-section table.responsive-stack tr td::before{
+    content:attr(data-label) "：";
+    display:inline;
+    font-size:12px;
+    color:#666;
+    margin-right:4px;
+    font-weight:600;
+  }
+}
+
+@media(min-width:720px){
+ .macro-table-wrap{display:block}
+ .macro-cards{display:none}
+}
+
+@media(min-width:720px){body{padding:20px}h1{font-size:30px}.grid{grid-template-columns:1.1fr 1.1fr .7fr 1fr 1fr 1fr 1fr 1fr}.actions{grid-template-columns:repeat(4,1fr)}.metric-grid{grid-template-columns:repeat(6,1fr)}}@media print{body{max-width:none;padding:8px;font-size:12px}body>:not(#printSummary){display:none!important}#printSummary{display:block!important}#printSummary h1{font-size:16px;margin:0 0 4px}#printSummary h2{font-size:11px;margin:5px 0 3px}#printSummary .summary-box{border:1px solid #ccc;padding:8px;margin:8px 0}#printSummary table{width:100%;min-width:0;border-collapse:collapse;font-size:8px;table-layout:fixed}#printSummary th,#printSummary td{border:1px solid #ccc;padding:2px;text-align:center}}
+
+@media(max-width:719px){
+  
+  
+}
+
+
+@media(max-width:719px){
+  .table-wrap table.responsive-stack td::before,
+  .table-wrap table.responsive-stack th::before{
+    content:"" !important;
+    display:none !important;
+  }
+  .mobile-label{
+    display:inline;
+    font-size:12px;
+    color:#666;
+    font-weight:700;
+    margin-right:4px;
+  }
+  .mobile-value{
+    display:inline;
+    color:#222;
+  }
+}
+
+
+.native-mobile-cards{display:none}
+.native-card{border:1px solid #ddd;border-radius:10px;padding:12px;margin:10px 0;background:#fafafa}
+.native-card-title{font-weight:700;font-size:16px;margin-bottom:8px}
+.native-card-row{border-top:1px solid #eee;padding:7px 0;line-height:1.4}
+.native-card-row:first-child{border-top:0}
+.native-label{font-weight:700;color:#555}
+.native-value{color:#222}
+@media(max-width:719px){
+  .native-mobile-cards{display:block}
+  .native-source-table{display:none!important}
+}
+@media(min-width:720px){
+  .native-mobile-cards{display:none}
+  .native-source-table{display:block}
+}
+
+</style></head><body>
+<h1>NutriCalc v4.0.9</h1><p class="small"><b>Evidence-Based Nutrition Calculator</b><br>BMI • FFMI • WHtR • TDEE 每日總消耗熱量</p><p class="small" data-i18n="subtitle"></p><div id="printSummary" class="print-only"></div>
+<div class="card"><h3 data-i18n="language"></h3><select id="langSelect" onchange="setLang(this.value)"><option value="zh">繁體中文</option><option value="en">English</option><option value="ja">日本語</option></select></div>
+<div class="card disclaimer"><h3 data-i18n="disclaimerTitle"></h3><p data-i18n="disclaimerText"></p></div>
+<div class="card"><h3 data-i18n="basicInfo"></h3><div class="grid"><div class="field"><label data-i18n="nameLabel"></label><input id="userName" type="text" data-placeholder="name"></div><div class="field"><label data-i18n="weightLabel"></label><input id="weight" type="number" data-placeholder="weight"></div><div class="field"><label data-i18n="unitLabel"></label><select id="weightUnit" onchange="calc(false)"><option value="kg">kg</option><option value="lb">lb</option></select></div><div class="field"><label data-i18n="heightLabel"></label><input id="height" type="number" data-placeholder="height"></div><div class="field"><label data-i18n="ageLabel"></label><input id="age" type="number" data-placeholder="age"></div><div class="field"><label data-i18n="bodyfatLabel"></label><input id="bodyfat" type="number" data-placeholder="bodyfat"></div><div class="field"><label data-i18n="waistLabel"></label><input id="waist" type="number" data-placeholder="waist"></div><div class="field"><label data-i18n="genderLabel"></label><select id="gender"><option value="male" data-i18n="male"></option><option value="female" data-i18n="female"></option></select></div></div><div class="actions"><button onclick="window.print()" data-i18n="print"></button><button onclick="shareResult()" data-i18n="share"></button><button onclick="shareLine()">LINE</button><button onclick="resetInputs()" data-i18n="reset"></button></div></div>
+<div class="card no-print"><h3 data-i18n="advanced"></h3><p class="small" data-i18n="advancedDesc"></p><label data-i18n="goal"></label><select id="goalSelect" onchange="applyPreset()"><option value="health" data-i18n="health"></option><option value="fatloss" selected data-i18n="fatloss"></option><option value="muscle" data-i18n="muscle"></option><option value="team" data-i18n="team"></option><option value="endurance" data-i18n="endurance"></option><option value="power" data-i18n="power"></option></select><div class="range-row"><label><span data-i18n="calorieAdjust"></span>：TDEE <span id="calorieSign">−</span> <span id="calorieValue">500</span> kcal</label><input type="range" id="calorieAdjust" min="-1000" max="1000" step="50" value="-500" oninput="syncSliderLabels()"><input type="number" id="calorieNumber" step="50" value="-500" onchange="syncCalorieNumber()"></div><div class="range-row"><label><span data-i18n="protein"></span>：<span id="proteinValue">2.2</span> g/kg</label><input type="range" id="proteinRatio" min="0.7" max="4.4" step="0.1" value="2.2" oninput="syncSliderLabels()"></div><div class="range-row"><label><span data-i18n="fat"></span>：<span id="fatValue">0.7</span> g/kg</label><input type="range" id="fatRatio" min="0.7" max="2.2" step="0.1" value="0.7" oninput="syncSliderLabels()"></div><div class="range-row"><label><span data-i18n="carbs"></span>：依活動量自動計算 / Auto by activity</label><span id="carbValue" style="display:none">2.2</span><input type="hidden" id="carbRatio" value="2.2"><p class="small" data-i18n="carbFormulaTitle"></p></div><button onclick="calc()" data-i18n="calculateApply"></button></div>
+<div id="result"></div>
+
+<details class="card recommendation-section">
+  <summary class="collapsible-summary" data-i18n="recommendationTitle"></summary>
+  <p data-i18n="recommendationText"></p>
+</details>
+
+<details class="card info-section">
+  <summary class="collapsible-summary" data-i18n="bmiFfmiTitle"></summary>
+  <details><summary data-i18n="bmiDef"></summary><p><b data-i18n="bmiFormula"></b></p><div class="table-wrap"><table id="bmiTable"></table></div><p class="small" data-i18n="bmiNote"></p></details>
+  <details><summary data-i18n="ffmiDef"></summary><p><b data-i18n="ffmiFormula"></b></p><p data-i18n="leanMassFormula"></p><div class="table-wrap native-source-table"><table id="ffmiTable"></table></div><div id="ffmiCards" class="native-mobile-cards"></div><p class="small" data-i18n="ffmiNote"></p><p><b data-i18n="ffmiInterpTitle"></b></p><p class="small" data-i18n="ffmiInterpText"></p></details>
+  <details><summary data-i18n="whtrDef"></summary><p><b data-i18n="whtrFormula"></b></p><div class="table-wrap"><table id="whtrTable"></table></div><p class="small" data-i18n="whtrNote"></p></details>
+  <details><summary data-i18n="lbmDef"></summary><p><b data-i18n="lbmFormula"></b></p><p class="small" data-i18n="lbmNote"></p></details>
+</details>
+
+<details class="card activity-section">
+  <summary class="collapsible-summary" data-i18n="activityDef"></summary>
+  <div id="activityDefList" class="activity-definition"></div>
+  <p class="small" data-i18n="activityFactorNote"></p>
+</details>
+
+<details class="card model-section">
+  <summary class="collapsible-summary" data-i18n="calorieModel"></summary>
+  <div class="table-wrap native-source-table"><table id="modelTable"></table></div><div id="modelCards" class="native-mobile-cards"></div>
+  <p class="small" data-i18n="cchText"></p>
+</details>
+
+<details class="card formula-section">
+  <summary class="collapsible-summary" data-i18n="formulaTitle"></summary>
+  <details><summary>BMR：Mifflin-St Jeor</summary><span data-i18n="bmrFormula"></span></details>
+  <details><summary data-i18n="tdeeTarget"></summary><span data-i18n="tdeeFormula"></span></details>
+  <details><summary data-i18n="macroFormulaTitle"></summary><span data-i18n="macroFormula"></span></details>
+</details>
+
+<details class="card food-section">
+  <summary class="collapsible-summary" data-i18n="highProteinFoods"></summary>
+  <div class="table-wrap native-source-table"><table id="proteinFoodTable"></table></div><div id="proteinFoodCards" class="native-mobile-cards"></div>
+  <p data-i18n="proteinFoodNote"></p>
+</details>
+
+<details class="card food-section">
+  <summary class="collapsible-summary" data-i18n="taiwanFoods"></summary>
+  <div class="table-wrap native-source-table"><table id="taiwanFoodTable"></table></div><div id="taiwanFoodCards" class="native-mobile-cards"></div>
+  <p class="small" data-i18n="foodNote"></p>
+</details>
+
+<details class="card evidence-section">
+  <summary class="collapsible-summary">Evidence / 參考文獻</summary>
+  <details><summary data-i18n="energyBalance"></summary><ul><li>Westerterp KR. Exercise, Energy Expenditure and Energy Balance.</li><li>Westerterp KR. Control of Energy Expenditure in Humans.</li><li>Heydenreich J et al. Total Energy Expenditure and Body Composition in Endurance Athletes.</li><li>Bellisle F et al. Meal Frequency and Energy Balance.</li><li>Volek JS et al. Diet and Exercise for Weight Loss.</li></ul></details>
+  <details><summary data-i18n="macronutrients"></summary><ul><li>ISSN Position Stand: Protein and Exercise.</li><li>Burke LM et al. Carbohydrates for Training and Competition.</li><li>Jeukendrup AE. Carbohydrate Intake During Exercise and Performance.</li><li>Helms ER et al. Dietary Protein During Caloric Restriction.</li><li>Bosse JD et al. Dietary Protein to Maximize Resistance Training.</li><li>Mamerow MM et al. Protein Distribution and Muscle Protein Synthesis.</li><li>Israetel M, Davis M, Hoffmann J. <i>The Renaissance Diet 2.0</i>.</li><li>Matthews M. <i>Thinner Leaner Stronger</i>.</li></ul></details>
+</details>
+
+<div class="card support-section">
+<h3 data-i18n="support"></h3>
+<p data-i18n="supportText"></p>
+<form action="https://www.paypal.com/paypalme/tsuwu827" method="get" style="margin:0">
+<button type="submit" class="donate-link" data-i18n="paypalSupport"></button>
+</form>
+<p class="small" data-i18n="supportNote"></p>
+<p class="small"><span data-i18n="contactEmail"></span>：<a href="mailto:nutricalcpal@gmail.com">nutricalcpal@gmail.com</a></p>
+<p class="small" data-i18n="paypalNote"></p>
+<p class="small"><span data-i18n="paypalCopyNote"></span><br><code id="paypalUrlText">https://www.paypal.com/paypalme/tsuwu827</code><br><button type="button" onclick="copyPayPalUrl()" data-i18n="copyPaypalUrl"></button></p>
+</div>
+<script>
+const translations={
+zh:{subtitle:"手機優先的熱量與巨量營養素計算器",language:"語言 / Language / 言語",disclaimerTitle:"免責聲明",disclaimerText:"本工具依照公開參考文獻與一般運動營養建議製作，僅供教育與自我紀錄參考。本站作者並非專業醫療人員，計算結果不等同於醫療、營養治療或個人化醫囑。如有疑慮，請先諮詢醫師或合格營養師。",basicInfo:"基本資料",male:"男",female:"女",calculate:"計算",print:"列印",share:"分享結果",reset:"重設",name:"姓名（選填）",nameLabel:"姓名（選填）",weight:"體重",weightLabel:"體重",unitLabel:"單位",heightLabel:"身高",ageLabel:"年齡",bodyfatLabel:"體脂率（選填）",waistLabel:"腰圍（選填）",genderLabel:"性別",height:"身高 cm",age:"年齡",bodyfat:"體脂率 %（選填）",waist:"腰圍 cm（選填）",advanced:"進階調整：目標熱量、蛋白質、碳水、脂肪比例",advancedDesc:"先選擇運動目標，系統會套用預設值。你可以微調熱量、蛋白質與碳水，脂肪會用剩餘熱量自動計算。",goal:"目標",health:"最佳健康",fatloss:"減脂",muscle:"增肌",team:"團體運動",endurance:"耐力運動",power:"爆發力運動",calorieAdjust:"熱量調整",protein:"蛋白質",defaultProtein:"預設蛋白質",carbs:"碳水化合物",fat:"脂肪",water:"建議攝取水量",calculateApply:"計算 / 套用調整",apply:"套用調整",bmiFfmiTitle:"BMI 與 FFMI 說明",bmiDef:"BMI 定義與分級",bmiFormula:"BMI = 體重(kg) ÷ 身高(m)²",classification:"常見分類",underweight:"體重過輕",normal:"一般範圍",overweight:"過重",obese:"肥胖",bmiNote:"BMI 無法區分肌肉與脂肪，重訓者或肌肉量高者可能 BMI 偏高但體脂不高。",ffmiDef:"FFMI 定義與參考表",maleFfmi:"男性標準化 FFMI",femaleFfmi:"女性標準化 FFMI",maleFfmi:"男性標準化 FFMI",femaleFfmi:"女性標準化 FFMI",ffmiFormula:"FFMI = 去脂體重(kg) ÷ 身高(m)²",leanMassFormula:"去脂體重 = 體重 × (1 − 體脂率)",reference:"參考解讀",ffmiLow:"偏低：肌肉量可能較少",ffmiAverage:"一般：常見健康成人範圍",ffmiGood:"良好：肌肉量高於平均",ffmiHigh:"高：訓練者常見區間",ffmiVeryHigh:"非常高：請確認體脂率與測量方式",ffmiNote:"FFMI 需要輸入體脂率才能計算。FFMI 公式本身不使用性別與年齡；身高已在公式中校正，但實際解讀會受到性別、年齡、訓練年資與體脂測量方式影響。",activityDef:"活動量定義",activityFactorNote:"＊為活動係數，用於 TDEE 每日總消耗熱量 = BMR × 活動係數。",calorieModel:"熱量模型與預設參數",defaultCalorieModel:"預設熱量模型",remainingFat:"依脂肪建議範圍",proteinRange:"蛋白質建議範圍",carbRange:"碳水建議範圍",fatRange:"",cchTitle:"CCH 解說：熱量限制假設",cchText:"*CCH（Caloric Constraint Hypothesis，熱量限制假設）指的是：在總熱量固定時，蛋白質與碳水設定越高，留給脂肪的熱量就越少；若蛋白質、碳水與脂肪的設定加總超過目標熱量，則需要降低其中一項。NutriCalc 的脂肪以剩餘熱量計算，因此 CCH 上限會依個人熱量與其他營養素設定而變動。",bmiExplain:"BMI 解說",carbFormulaTitle:"碳水參考起始值",initialCarbs:"碳水參考起始值",finalCarbs:"碳水",minimumFat:"最低脂肪",formulaTitle:"計算公式",bmrFormula:"男性：BMR = 10×體重 + 6.25×身高 − 5×年齡 + 5<br>女性：BMR = 10×體重 + 6.25×身高 − 5×年齡 − 161",tdeeTarget:"TDEE 與目標熱量",tdeeFormula:"TDEE 每日總消耗熱量 = BMR × 活動係數<br>目標熱量 = TDEE + 熱量調整值",macroFormulaTitle:"巨量營養素",macroFormula:"計算流程：<br>1. 算出總熱量：TDEE + 目標熱量調整值<br>2. 算出總蛋白需求：體重 × 蛋白質 g/kg<br>3. 算出脂肪攝取：體重 × 脂肪 g/kg（預設 0.7 g/kg）<br>4. 脂肪 + 蛋白質熱量 = 脂肪(g)×9 + 蛋白質(g)×4<br>5. 碳水(g) = [總熱量 − (脂肪熱量 + 蛋白質熱量)] ÷ 4<br><br>碳水參考起始值：無訓練 1.1 g/kg；輕度訓練 2.2 g/kg；中度訓練 3.3 g/kg；高強度訓練 4.4 g/kg；極高強度訓練 4.4 g/kg<br>水量(ml) = TDEE × 1.5",recommendationTitle:"增肌與減脂建議",recommendationText:"若目標為增肌或減脂，建議配合漸進式阻力訓練、充足蛋白質攝取與每晚 7–9 小時睡眠，以達到較佳效果。",highProteinFoods:"高蛋白密度食物（每100 kcal）",proteinFoodNote:"減脂期間優先選擇蛋白質密度較高的食物，可在有限熱量下維持肌肉量並增加飽足感。",taiwanFoods:"台灣常見食物（每100 kcal）",foodNote:"食物數值為估算值，會因品牌、烹調方式、含水量與調味而不同。",energyBalance:"熱量平衡（Energy Balance）",macronutrients:"巨量營養素（Protein / Carbohydrate / Fat）",support:"支持 NutriCalc",support30:"支持 NT$30",support60:"支持 NT$60",support90:"支持 NT$90",supportText:"❤️ 本工具完全免費使用。如果 NutriCalc 對您有幫助，歡迎透過 PayPal 支持網站維護與新功能開發。",paypalSupport:"☕ 支持 NutriCalc 開發",supportNote:"目前版本：v4.0。GitHub Pages 免費提供網站託管，您的支持將用於持續開發、維護與資料更新。",contactEmail:"聯絡信箱",paypalNote:"若 LINE 內建瀏覽器封鎖 PayPal，請複製下方網址，或用右上角選單改用 Safari / Chrome 開啟。",paypalCopyNote:"PayPal 備用網址",copyPaypalUrl:"複製 PayPal 網址",reportTitle:"NutriCalc 營養報告",targetMacros:"目標巨量營養素",activity:"活動量",targetCalories:"目標熱量",notEntered:"未輸入",notCalculated:"未計算",year:"歲",bodyFat:"體脂率",calorieModelNow:"目前熱量模型",ffmiExplain:"FFMI 解說",fatNegative:"碳水為負值，請降低蛋白質或熱量赤字",feedbackTitle:"建議與回饋",feedbackText:"如果您對 NutriCalc 有建議、錯誤回報或希望新增功能，歡迎來信。",proteinMode:"蛋白質計算基準",proteinModeBodyweight:"以體重計算",proteinModeLbm:"以去脂體重 LBM 計算",quickImportTitle:"Garmin / InBody 快速匯入",quickImportPlaceholder:"貼上資料，例如：\n體重 85.5kg\n體脂率 21%\n身高 185cm\n腰圍 88cm\n年齡 44",quickImportHelp:"支援關鍵字：體重/weight、身高/height、年齡/age、體脂/body fat、腰圍/waist。",importData:"匯入資料",whtrDef:"WHtR 腰高比定義與參考",whtrFormula:"WHtR = 腰圍(cm) ÷ 身高(cm)",whtrNote:"一般常用參考：WHtR 小於 0.5 通常代表腰圍相對身高較理想；本工具僅供參考。",lbmDef:"LBM 去脂體重",lbmFormula:"LBM = 體重 × (1 − 體脂率)",lbmNote:"若選擇 LBM 蛋白模式，蛋白質會以去脂體重計算；若未輸入體脂率，系統會退回以體重計算。",lbm:"LBM",whtr:"WHtR",ffmiEvaluation:"FFMI 評價",ffmiInterpTitle:"FFMI 解讀說明",ffmiInterpText:"FFMI（Fat-Free Mass Index）為去脂體重指數，已校正身高，可用於跨身高比較肌肉量。公式本身不區分性別與年齡，但實際解讀應考慮性別、年齡、訓練年資與體脂測量誤差。女性 FFMI 通常比男性低約 3–4 點。自然訓練常見範圍：男性約 20–24，女性約 17–21。FFMI 僅供身體組成評估，不能單獨判定健康狀況。",ffmiLowEval:"肌肉量偏低",ffmiAvgEval:"一般成人平均範圍",ffmiGoodEval:"良好，常見於規律訓練者",ffmiHighEval:"高肌肉量",ffmiVeryHighEval:"非常高肌肉量，請確認體脂測量方式",paypalSupport:"☕ 支持 NutriCalc 開發",supportNote:"目前版本：v4.0。GitHub Pages 免費提供網站託管，您的支持將用於持續開發、維護與資料更新。",contactEmail:"聯絡信箱",paypalNote:"若 LINE 內建瀏覽器封鎖 PayPal，請複製下方網址，或用右上角選單改用 Safari / Chrome 開啟。",paypalCopyNote:"PayPal 備用網址",copyPaypalUrl:"複製 PayPal 網址",generated:"由 NutriCalc 產生"},
+en:{subtitle:"Mobile-first calorie and macro calculator",language:"Language",disclaimerTitle:"Disclaimer",disclaimerText:"This tool is for education and self-tracking only and is not medical advice. Consult a physician or registered dietitian if you have concerns.",basicInfo:"Basic information",male:"Male",female:"Female",calculate:"Calculate",print:"Print",share:"Share Result",reset:"Reset",name:"Name (optional)",nameLabel:"Name (optional)",weight:"Weight",weightLabel:"Weight",unitLabel:"Unit",heightLabel:"Height",ageLabel:"Age",bodyfatLabel:"Body fat (optional)",waistLabel:"Waist (optional)",genderLabel:"Sex",height:"Height cm",age:"Age",bodyfat:"Body fat % (optional)",waist:"Waist cm (optional)",advanced:"Advanced adjustment: calories, protein, carbohydrate, and fat ratio",advancedDesc:"Choose a goal to apply presets. You can fine-tune calories, protein, and carbohydrate. Fat is calculated from remaining calories.",goal:"Goal",health:"Optimal Health",fatloss:"Fat Loss",muscle:"Muscle Gain",team:"Team Sports",endurance:"Endurance Sports",power:"Power Sports",calorieAdjust:"Calorie adjustment",protein:"Protein",defaultProtein:"Default Protein",carbs:"Carbohydrate",fat:"Fat",water:"Recommended water intake",calculateApply:"Calculate / Apply",apply:"Apply",bmiFfmiTitle:"BMI and FFMI guide",bmiDef:"BMI definition and classification",bmiFormula:"BMI = weight(kg) ÷ height(m)²",classification:"Classification",underweight:"Underweight",normal:"Normal range",overweight:"Overweight",obese:"Obesity",bmiNote:"BMI does not distinguish muscle from fat.",ffmiDef:"FFMI definition and reference",maleFfmi:"Male Standardized FFMI",femaleFfmi:"Female Standardized FFMI",maleFfmi:"Male Standardized FFMI",femaleFfmi:"Female Standardized FFMI",ffmiFormula:"FFMI = fat-free mass(kg) ÷ height(m)²",leanMassFormula:"Fat-free mass = weight × (1 − body fat %)",reference:"Reference",ffmiLow:"Low",ffmiAverage:"Average",ffmiGood:"Good",ffmiHigh:"High",ffmiVeryHigh:"Very high",ffmiNote:"FFMI requires body-fat percentage. The formula itself does not use sex or age; height is already normalized, but interpretation can vary by sex, age, training history, and body-fat measurement method.",activityDef:"Activity Definitions",activityFactorNote:"* indicates the activity factor used in TDEE total daily energy expenditure = BMR × activity factor.",calorieModel:"Calorie Model and Preset Parameters",defaultCalorieModel:"Default Calorie Model",remainingFat:"Based on fat range",proteinRange:"Recommended Protein Range",carbRange:"Recommended Carbohydrate Range",fatRange:"",cchTitle:"CCH: Caloric constraint hypothesis",cchText:"*CCH means that when total calories are fixed, higher protein and carbohydrate targets leave fewer calories for fat. If protein, carbohydrate, and fat targets exceed total calories, one of them must be reduced. In NutriCalc, fat is calculated from remaining calories, so the CCH upper limit depends on each person’s calorie target and macro settings.",bmiExplain:"BMI note",carbFormulaTitle:"Carbohydrate reference starting values",initialCarbs:"Carbohydrate reference",finalCarbs:"Carbohydrate",minimumFat:"Minimum fat",formulaTitle:"Formulas",bmrFormula:"Male: BMR = 10×weight + 6.25×height − 5×age + 5<br>Female: BMR = 10×weight + 6.25×height − 5×age − 161",tdeeTarget:"TDEE and target calories",tdeeFormula:"TDEE total daily energy expenditure = BMR × activity factor<br>Target calories = TDEE + calorie adjustment",macroFormulaTitle:"Macronutrients",macroFormula:"Calculation flow:<br>1. Calculate total calories: TDEE + goal calorie adjustment<br>2. Calculate protein: weight × protein g/kg<br>3. Calculate fat intake: weight × fat g/kg (default 0.7 g/kg)<br>4. Fat + protein calories = fat(g)×9 + protein(g)×4<br>5. Carbohydrate(g) = [total calories − (fat calories + protein calories)] ÷ 4<br><br>Carbohydrate reference starting values: no training 1.1 g/kg; light training 2.2 g/kg; moderate training 3.3 g/kg; high-intensity training 4.4 g/kg; extreme training 4.4 g/kg<br>Water(ml) = TDEE × 1.5",recommendationTitle:"Muscle gain and fat loss advice",recommendationText:"For muscle gain or fat loss, combine progressive resistance training, sufficient protein intake, and 7–9 hours of sleep per night for better results.",highProteinFoods:"High-protein-density foods (per 100 kcal)",proteinFoodNote:"During fat loss, prioritize higher protein-density foods.",taiwanFoods:"Common Foods in Taiwan (per 100 kcal)",foodNote:"Food values are estimates.",energyBalance:"Energy Balance",macronutrients:"Macronutrients",support:"Support NutriCalc",support30:"Support NT$30",support60:"Support NT$60",support90:"Support NT$90",supportText:"Small support helps maintain this tool.",reportTitle:"NutriCalc Nutrition Report",targetMacros:"Target Macronutrients",activity:"Activity",targetCalories:"Target Calories",notEntered:"Not entered",notCalculated:"Not calculated",year:"years",bodyFat:"Body fat",calorieModelNow:"Current calorie model",ffmiExplain:"FFMI note",fatNegative:"Carbohydrate is negative. Lower protein or calorie deficit.",feedbackTitle:"Suggestions and feedback",feedbackText:"If you have suggestions, bug reports, or feature requests for NutriCalc, please email us.",proteinMode:"Protein calculation basis",proteinModeBodyweight:"Use body weight",proteinModeLbm:"Use lean body mass (LBM)",quickImportTitle:"Garmin / InBody quick import",quickImportPlaceholder:"Paste data, for example:\nWeight 85.5kg\nBody fat 21%\nHeight 185cm\nWaist 88cm\nAge 44",quickImportHelp:"Supported keywords: weight, height, age, body fat, waist.",importData:"Import data",whtrDef:"WHtR definition and reference",whtrFormula:"WHtR = waist circumference(cm) ÷ height(cm)",whtrNote:"Common reference: WHtR below 0.5 is often considered more favorable; this tool is for reference only.",lbmDef:"Lean body mass (LBM)",lbmFormula:"LBM = weight × (1 − body fat %)",lbmNote:"If LBM protein mode is selected, protein is calculated from lean body mass. Without body-fat input, body weight is used instead.",lbm:"LBM",whtr:"WHtR",ffmiEvaluation:"FFMI Evaluation",ffmiInterpTitle:"FFMI interpretation guide",ffmiInterpText:"FFMI stands for Fat-Free Mass Index. It adjusts lean mass for height and can be used to compare muscularity across different heights. The formula itself does not use sex or age, but interpretation should consider sex, age, training history, and body-fat measurement error. Female FFMI is commonly about 3–4 points lower than male FFMI. Common natural training ranges are about 20–24 for men and 17–21 for women. FFMI is a body-composition reference and should not be used alone to determine health status.",ffmiLowEval:"Low muscularity",ffmiAvgEval:"Average adult range",ffmiGoodEval:"Good; common among regularly trained users",ffmiHighEval:"High muscularity",ffmiVeryHighEval:"Very high muscularity; verify body-fat measurement method",paypalSupport:"☕ Support NutriCalc Development",supportNote:"Current version: v4.0. GitHub Pages provides free hosting; your support helps ongoing development, maintenance, and data updates.",contactEmail:"Contact email",paypalNote:"If LINE blocks PayPal, copy the URL below or open this page in Safari / Chrome from the menu.",paypalCopyNote:"Fallback PayPal URL",copyPaypalUrl:"Copy PayPal URL",generated:"Generated with NutriCalc"},
+ja:{subtitle:"スマホ優先のカロリー・マクロ計算ツール",language:"言語",disclaimerTitle:"免責事項",disclaimerText:"本ツールは教育・自己記録用であり、医療助言ではありません。",basicInfo:"基本情報",male:"男性",female:"女性",calculate:"計算",print:"印刷",share:"結果を共有",reset:"リセット",name:"氏名（任意）",nameLabel:"氏名（任意）",weight:"体重",weightLabel:"体重",unitLabel:"単位",heightLabel:"身長",ageLabel:"年齢",bodyfatLabel:"体脂肪率（任意）",waistLabel:"ウエスト（任意）",genderLabel:"性別",height:"身長 cm",age:"年齢",bodyfat:"体脂肪率 %（任意）",waist:"ウエスト cm（任意）",advanced:"詳細調整：目標カロリー・たんぱく質・炭水化物・脂質比率",advancedDesc:"目標を選ぶと初期値が適用されます。カロリー、たんぱく質、炭水化物を調整できます。",goal:"目標",health:"最適な健康",fatloss:"Fat Loss",muscle:"Muscle Gain",team:"チームスポーツ",endurance:"持久系スポーツ",power:"パワースポーツ",calorieAdjust:"カロリー調整",protein:"たんぱく質",defaultProtein:"標準たんぱく質",carbs:"炭水化物",fat:"脂質",water:"推奨水分摂取量",calculateApply:"計算 / 適用",apply:"適用",bmiFfmiTitle:"BMI・FFMI 説明",bmiDef:"BMI の定義と分類",bmiFormula:"BMI = 体重(kg) ÷ 身長(m)²",classification:"分類",underweight:"低体重",normal:"標準範囲",overweight:"過体重",obese:"肥満",bmiNote:"BMI は筋肉と脂肪を区別できません。",ffmiDef:"FFMI の定義と参考表",maleFfmi:"男性標準化 FFMI",femaleFfmi:"女性標準化 FFMI",maleFfmi:"男性標準化 FFMI",femaleFfmi:"女性標準化 FFMI",ffmiFormula:"FFMI = 除脂肪量(kg) ÷ 身長(m)²",leanMassFormula:"除脂肪量 = 体重 × (1 − 体脂肪率)",reference:"参考",ffmiLow:"低め",ffmiAverage:"一般",ffmiGood:"良好",ffmiHigh:"高い",ffmiVeryHigh:"非常に高い",ffmiNote:"FFMI には体脂肪率が必要です。FFMI の式そのものは性別や年齢を使用しません。身長は式内で補正されますが、解釈は性別、年齢、トレーニング歴、体脂肪率の測定方法により変わります。",activityDef:"活動量の定義",activityFactorNote:"＊は TDEE 1日の総消費カロリー = BMR × 活動係数 に使用する活動係数です。",calorieModel:"カロリーモデルと推奨設定",defaultCalorieModel:"標準カロリーモデル",remainingFat:"脂質推奨範囲に基づく",proteinRange:"たんぱく質の推奨範囲",carbRange:"炭水化物の推奨範囲",fatRange:"",cchTitle:"CCH 解説：カロリー制約仮説",cchText:"*CCH（Caloric Constraint Hypothesis）とは、総カロリーが固定されている場合、たんぱく質と炭水化物を高く設定するほど、脂質に残るカロリーが少なくなるという考え方です。NutriCalc では脂質を残りカロリーから計算するため、CCH 上限は個人の目標カロリーとマクロ設定によって変わります。",bmiExplain:"BMI 説明",carbFormulaTitle:"炭水化物の参考開始値",initialCarbs:"炭水化物参考値",finalCarbs:"炭水化物",minimumFat:"最低脂質",formulaTitle:"計算式",bmrFormula:"男性：BMR = 10×体重 + 6.25×身長 − 5×年齢 + 5<br>女性：BMR = 10×体重 + 6.25×身長 − 5×年齢 − 161",tdeeTarget:"TDEE と目標カロリー",tdeeFormula:"TDEE 1日の総消費カロリー = BMR × 活動係数<br>目標カロリー = TDEE + カロリー調整値",macroFormulaTitle:"マクロ栄養素",macroFormula:"計算フロー：<br>1. 総カロリー：TDEE + 目標カロリー調整値<br>2. たんぱく質：体重 × たんぱく質 g/kg<br>3. 脂質摂取量：体重 × 脂質 g/kg（初期値 0.7 g/kg）<br>4. 脂質 + たんぱく質カロリー = 脂質(g)×9 + たんぱく質(g)×4<br>5. 炭水化物(g) = [総カロリー − (脂質カロリー + たんぱく質カロリー)] ÷ 4<br><br>活動量別の炭水化物参考値：トレーニングなし 1.1 g/kg；軽度 2.2 g/kg；中等度 3.3 g/kg；高強度 4.4 g/kg；極高強度 4.4 g/kg<br>水分(ml) = TDEE × 1.5",recommendationTitle:"筋肥大・減脂のアドバイス",recommendationText:"筋肥大または減脂を目標にする場合、漸進的なレジスタンストレーニング、十分なたんぱく質摂取、毎晩7〜9時間の睡眠をおすすめします。",highProteinFoods:"高たんぱく密度食品（100 kcalあたり）",proteinFoodNote:"減脂中は高たんぱく密度の食品を優先しましょう。",taiwanFoods:"台湾でよく見られる食品（100 kcalあたり）",foodNote:"食品値は推定値です。",energyBalance:"エネルギーバランス",macronutrients:"マクロ栄養素",support:"NutriCalc を支援",support30:"NT$30 を支援",support60:"NT$60 を支援",support90:"NT$90 を支援",supportText:"小額支援は維持と更新に役立ちます。",reportTitle:"NutriCalc 栄養レポート",targetMacros:"目標マクロ栄養素",activity:"活動量",targetCalories:"目標カロリー",notEntered:"未入力",notCalculated:"未計算",year:"歳",bodyFat:"体脂肪率",calorieModelNow:"現在のカロリーモデル",ffmiExplain:"FFMI 説明",fatNegative:"炭水化物がマイナスです。たんぱく質またはカロリー赤字を下げてください。",feedbackTitle:"ご意見・フィードバック",feedbackText:"NutriCalc へのご提案、不具合報告、追加機能のご希望があれば、メールでお知らせください。",proteinMode:"たんぱく質計算基準",proteinModeBodyweight:"体重を使用",proteinModeLbm:"除脂肪量（LBM）を使用",quickImportTitle:"Garmin / InBody クイック入力",quickImportPlaceholder:"データを貼り付け例：\n体重 85.5kg\n体脂肪率 21%\n身長 185cm\nウエスト 88cm\n年齢 44",quickImportHelp:"対応キーワード：体重/weight、身長/height、年齢/age、体脂肪/body fat、ウエスト/waist。",importData:"データを取り込む",whtrDef:"WHtR（ウエスト身長比）の定義と参考",whtrFormula:"WHtR = ウエスト(cm) ÷ 身長(cm)",whtrNote:"一般的な参考値として、WHtR 0.5 未満は比較的良好とされます。本ツールは参考用です。",lbmDef:"LBM 除脂肪量",lbmFormula:"LBM = 体重 × (1 − 体脂肪率)",lbmNote:"LBM たんぱく質モードを選ぶと除脂肪量を基準に計算します。体脂肪率未入力の場合は体重基準に戻ります。",lbm:"LBM",whtr:"WHtR",ffmiEvaluation:"FFMI 評価",ffmiInterpTitle:"FFMI 解釈ガイド",ffmiInterpText:"FFMI は Fat-Free Mass Index（除脂肪量指数）です。身長で補正されているため、身長が異なる人同士の筋肉量比較に使えます。式そのものは性別や年齢を使用しませんが、実際の解釈では性別、年齢、トレーニング歴、体脂肪率の測定誤差を考慮する必要があります。女性の FFMI は男性より一般的に約3〜4低い傾向があります。自然なトレーニングでよく見られる範囲は男性で約20〜24、女性で約17〜21です。FFMI は身体組成の参考指標であり、健康状態を単独で判断するものではありません。",ffmiLowEval:"筋肉量が低め",ffmiAvgEval:"一般成人の平均範囲",ffmiGoodEval:"良好。定期的にトレーニングする人に多い範囲",ffmiHighEval:"高い筋肉量",ffmiVeryHighEval:"非常に高い筋肉量。体脂肪率の測定方法を確認してください",paypalSupport:"☕ NutriCalc 開発を支援する",supportNote:"現在のバージョン：v4.0。GitHub Pages は無料ホスティングを提供しており、ご支援は継続的な開発、保守、データ更新に使われます。",contactEmail:"連絡先メール",paypalNote:"LINE内ブラウザでPayPalがブロックされる場合は、下のURLをコピーするか、Safari / Chromeで開いてください。",paypalCopyNote:"PayPal 予備URL",copyPaypalUrl:"PayPal URLをコピー",generated:"NutriCalcで作成"}};
+const goalKeys=["health","fatloss","muscle","team","endurance","power"],presets={
+health:{kcal:0,protein:1.1,carb:2.0,proteinRange:"0.7–4.4 g/kg to *CCH upper limit",carbRange:"0.7–11 g/kg",fatRange:""},
+fatloss:{kcal:-500,protein:2.2,carb:2.2,proteinRange:"1.6–3.3 g/kg",carbRange:"0.7 g/kg to *CCH upper limit",fatRange:""},
+muscle:{kcal:300,protein:2.0,carb:3.5,proteinRange:"max 2.2 g/kg",carbRange:"2.2–11 g/kg",fatRange:""},
+team:{kcal:0,protein:1.6,carb:3.3,proteinRange:"1.3–3.3 g/kg",carbRange:"3.3–6.6 g/kg",fatRange:""},
+endurance:{kcal:0,protein:1.5,carb:3.3,proteinRange:"1.1–2.2 g/kg",carbRange:"3.3–11 g/kg",fatRange:""},
+power:{kcal:0,protein:2.2,carb:1.8,proteinRange:"1.5–4.4 g/kg",carbRange:"2.2–5.5 g/kg",fatRange:""}
+};
+const foods1={zh:["鮪魚罐頭(水煮)","雞胸肉","乳清蛋白","虱目魚","希臘式優格","雞蛋","豆干","毛豆"],en:["Tuna can","Chicken breast","Whey protein","Milkfish","Greek yogurt","Egg","Firm tofu jerky","Edamame"],ja:["ツナ缶","鶏むね肉","ホエイプロテイン","サバヒー","ギリシャヨーグルト","卵","豆干","枝豆"]},fd1=[["20g","0g","1g"],["18g","0g","2g"],["20–25g","2–5g","1–2g"],["20g","0g","2g"],["15g","4g","0–2g"],["13g","1g","7g"],["12g","5g","4g"],["11g","8g","4g"]],foods2={zh:["雞蛋","優格","豆花","麵條","虱目魚","白飯","地瓜","無糖豆漿","傳統豆腐"],en:["Egg","Yogurt","Tofu pudding","Noodles","Milkfish","White rice","Sweet potato","Unsweetened soy milk","Traditional tofu"],ja:["卵","ヨーグルト","豆花","麺","サバヒー","白米","さつまいも","無糖豆乳","木綿豆腐"]},fd2=[["13g","1g","7g"],["8g","6g","3g"],["5g","8g","3g"],["3g","24g","1g"],["20g","0g","2g"],["2g","22g","0g"],["2g","20g","0g"],["8g","4g","4g"],["10g","4g","5g"]];let currentLang="zh",lastShareText="";function t(k){return translations[currentLang][k]||translations.zh[k]||k}function r(x){return Math.round(x)}
+
+function rangeText(k,type){
+ const zh={
+  health:{protein:'0.7–4.4 g/kg 到 *CCH 上限',carb:'0.7–11 g/kg'},
+  fatloss:{protein:'1.6–3.3 g/kg',carb:'0.7 g/kg 到 *CCH 上限'},
+  muscle:{protein:'最多 2.2 g/kg',carb:'2.2–11 g/kg'},
+  team:{protein:'1.3–3.3 g/kg',carb:'3.3–6.6 g/kg'},
+  endurance:{protein:'1.1–2.2 g/kg',carb:'3.3–11 g/kg'},
+  power:{protein:'1.5–4.4 g/kg',carb:'2.2–5.5 g/kg'}
+ };
+ const en={
+  health:{protein:'0.7–4.4 g/kg to *CCH upper limit',carb:'0.7–11 g/kg'},
+  fatloss:{protein:'1.6–3.3 g/kg',carb:'0.7 g/kg to *CCH upper limit'},
+  muscle:{protein:'up to 2.2 g/kg',carb:'2.2–11 g/kg'},
+  team:{protein:'1.3–3.3 g/kg',carb:'3.3–6.6 g/kg'},
+  endurance:{protein:'1.1–2.2 g/kg',carb:'3.3–11 g/kg'},
+  power:{protein:'1.5–4.4 g/kg',carb:'2.2–5.5 g/kg'}
+ };
+ const ja={
+  health:{protein:'0.7–4.4 g/kg（*CCH上限まで）',carb:'0.7–11 g/kg'},
+  fatloss:{protein:'1.6–3.3 g/kg',carb:'0.7 g/kg（*CCH上限まで）'},
+  muscle:{protein:'最大 2.2 g/kg',carb:'2.2–11 g/kg'},
+  team:{protein:'1.3–3.3 g/kg',carb:'3.3–6.6 g/kg'},
+  endurance:{protein:'1.1–2.2 g/kg',carb:'3.3–11 g/kg'},
+  power:{protein:'1.5–4.4 g/kg',carb:'2.2–5.5 g/kg'}
+ };
+ const table=currentLang==='zh'?zh:(currentLang==='en'?en:ja);
+ return table[k][type];
+}
+function fatRangeText(k){
+ if(k==='health'){
+  if(currentLang==='zh') return '0.7 g/kg 到每日總熱量 40%';
+  if(currentLang==='en') return '0.7 g/kg to 40% of total daily calories';
+  return '0.7 g/kg から1日総カロリーの40%まで';
+ }
+ if(currentLang==='zh') return '0.7 g/kg 到 *CCH 上限';
+ if(currentLang==='en') return '0.7 g/kg to *CCH upper limit';
+ return '0.7 g/kg から*CCH上限まで';
+}
+
+function metricName(k){if(currentLang==='zh'){const m={BMI:'BMI 身體質量指數',BMR:'BMR 基礎代謝率',FFMI:'FFMI 去脂體重指數',LBM:'LBM 去脂體重',WHtR:'WHtR 腰高比',TDEE:'TDEE 每日總消耗熱量'};return m[k]||k;}return k;}function modelText(k){let p=presets[k];return p.kcal===0?"TDEE":p.kcal>0?`TDEE + ${p.kcal} kcal`:`TDEE − ${Math.abs(p.kcal)} kcal`}
+function setLang(lang){currentLang=lang;document.documentElement.lang=lang==='zh'?'zh-Hant':lang;document.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=t(e.dataset.i18n));document.querySelectorAll('[data-placeholder]').forEach(e=>e.placeholder=t(e.dataset.placeholder));renderStatic();syncSliderLabels();calc(false)}
+
+function enhanceResponsiveTables(){
+ document.querySelectorAll('.table-wrap table').forEach(table=>{
+  if(table.closest('.macro-table-wrap')) return;
+  table.classList.add('responsive-stack'); table.querySelectorAll('[data-mobile-formatted]').forEach(c=>{c.innerHTML=c.textContent;delete c.dataset.mobileFormatted;});
+
+  const firstRow=table.querySelector('tr');
+  if(!firstRow) return;
+  const headers=[...firstRow.children].map(c=>c.textContent.trim());
+
+  table.querySelectorAll('tr').forEach((row,rowIndex)=>{
+   [...row.children].forEach((cell,i)=>{
+    const label=headers[i]||'';
+    cell.setAttribute('data-label', rowIndex===0?'':label);
+
+    if(rowIndex>0 && label && !cell.dataset.mobileFormatted){
+      const value=cell.textContent.trim();
+      cell.innerHTML=`<span class="mobile-label">${label}：</span><span class="mobile-value">${value}</span>`;
+      cell.dataset.mobileFormatted='1';
+    }
+   });
+  });
+ });
+}
+
+
+function cardRow(label,value){
+ return `<div class="native-card-row"><span class="native-label">${label}：</span><span class="native-value">${value}</span></div>`;
+}
+function renderNativeCards(){
+ const goalKeys=['health','fatloss','muscle','team','endurance','power'];
+
+ const ffmiRows=[
+  ['<18','<15',t('ffmiLowEval')],
+  ['18–20','15–17',t('ffmiAvgEval')],
+  ['20–22','17–19',t('ffmiGoodEval')],
+  ['22–25','19–21',t('ffmiHighEval')],
+  ['≥25','≥21',t('ffmiVeryHighEval')]
+ ];
+ const ffmiCards=document.getElementById('ffmiCards');
+ if(ffmiCards){
+  ffmiCards.innerHTML=ffmiRows.map(r=>`<div class="native-card">${cardRow(t('maleFfmi'),r[0])}${cardRow(t('femaleFfmi'),r[1])}${cardRow(t('reference'),r[2])}</div>`).join('');
+ }
+
+ const modelCards=document.getElementById('modelCards');
+ if(modelCards){
+  modelCards.innerHTML=goalKeys.map(k=>`<div class="native-card"><div class="native-card-title">${t(k)}</div>${cardRow(t('defaultCalorieModel'),modelText(k))}${cardRow(t('defaultProtein'),presets[k].protein+' g/kg')}${cardRow(t('proteinRange'),rangeText(k,'protein'))}${cardRow(t('carbRange'),rangeText(k,'carb'))}${cardRow(t('fatRange'),fatRangeText(k))}</div>`).join('');
+ }
+
+ const proteinRows=[
+  ['鮪魚罐頭(水煮)','20g','0g','1g'],
+  ['雞胸肉','18g','0g','2g'],
+  ['乳清蛋白','20–25g','2–5g','1–2g'],
+  ['蝦仁','20g','0g','1g'],
+  ['虱目魚','14g','0g','5g'],
+  ['雞蛋','8g','1g','7g'],
+  ['希臘優格','9–12g','3–5g','0–4g'],
+  ['豆腐','8g','2g','5g']
+ ];
+ const proteinFoodCards=document.getElementById('proteinFoodCards');
+ if(proteinFoodCards){
+  proteinFoodCards.innerHTML=proteinRows.map(r=>`<div class="native-card"><div class="native-card-title">${r[0]}</div>${cardRow(t('protein'),r[1])}${cardRow(t('carbs'),r[2])}${cardRow(t('fat'),r[3])}</div>`).join('');
+ }
+
+ const taiwanRows=[
+  ['白飯','2g','23g','0g'],
+  ['地瓜','2g','24g','0g'],
+  ['香蕉','1g','23g','0g'],
+  ['雞蛋','8g','1g','7g'],
+  ['無糖優格','6–10g','4–8g','0–4g'],
+  ['豆花','4g','10g','3g'],
+  ['麵條','4g','20g','1g'],
+  ['虱目魚','14g','0g','5g'],
+  ['雞胸肉','18g','0g','2g'],
+  ['鮪魚罐頭(水煮)','20g','0g','1g'],
+  ['豆腐','8g','2g','5g'],
+  ['牛奶','5g','7g','4g']
+ ];
+ const taiwanFoodCards=document.getElementById('taiwanFoodCards');
+ if(taiwanFoodCards){
+  taiwanFoodCards.innerHTML=taiwanRows.map(r=>`<div class="native-card"><div class="native-card-title">${r[0]}</div>${cardRow(t('protein'),r[1])}${cardRow(t('carbs'),r[2])}${cardRow(t('fat'),r[3])}</div>`).join('');
+ }
+}
+
+function renderStatic(){let acts={zh:["無訓練（*1.2）：無運動 / 步數 < 5000","輕度訓練（*1.375）：訓練持續約 1 小時，稍微流汗，平均消耗約 300 kcal","中度訓練（*1.55）：訓練持續 1–2 小時，大量流汗，平均消耗約 500 kcal","高強度訓練（*1.725）：訓練超過 2 小時，全身濕透，平均消耗約 1000 kcal","極高強度訓練（*1.9）：職業運動員或長時間高負荷訓練者"],en:["No Training (*1.2): no exercise / steps < 5,000","Light Training (*1.375): about 1 hour, light sweating, about 300 kcal","Moderate Training (*1.55): 1–2 hours, heavy sweating, about 500 kcal","High-intensity Training (*1.725): over 2 hours, about 1000 kcal","Extreme Training (*1.9): professional athletes or very high training loads"],ja:["トレーニングなし（*1.2）：運動なし / 歩数 5,000 未満","軽度トレーニング（*1.375）：約1時間、軽く汗をかく、約300 kcal","中等度トレーニング（*1.55）：1〜2時間、多めに汗をかく、約500 kcal","高強度トレーニング（*1.725）：2時間以上、約1000 kcal","極高強度トレーニング（*1.9）：プロ選手または非常に高い負荷"]};document.getElementById('activityDefList').innerHTML=acts[currentLang].map(x=>`<p>${x}</p>`).join('');const carbFormulaLabels={zh:['無訓練參考起始值：體重 × 1.1 g/kg','輕度訓練參考起始值：體重 × 2.2 g/kg','中度訓練參考起始值：體重 × 3.3 g/kg','高強度訓練參考起始值：體重 × 4.4 g/kg','極高強度訓練參考起始值：體重 × 4.4 g/kg'],en:['No Training reference starting point: weight × 1.1 g/kg','Light Training reference starting point: weight × 2.2 g/kg','Moderate Training reference starting point: weight × 3.3 g/kg','High-intensity Training reference starting point: weight × 4.4 g/kg','Extreme Training reference starting point: weight × 4.4 g/kg'],ja:['トレーニングなし：体重 × 1.1 g/kg','軽度トレーニング：体重 × 2.2 g/kg','中等度トレーニング：体重 × 3.3 g/kg','高強度トレーニング：体重 × 4.4 g/kg','極高強度トレーニング：体重 × 4.4 g/kg']};const carbEl=document.getElementById('carbFormulaList');if(carbEl){carbEl.innerHTML=carbFormulaLabels[currentLang].map(x=>`<p>${x}</p>`).join('');}document.getElementById('modelTable').innerHTML=`<tr><th>${t('goal')}</th><th>${t('defaultCalorieModel')}</th><th>${t('defaultProtein')}</th><th>${t('proteinRange')}</th><th>${t('carbRange')}</th><th>${t('fatRange')}</th></tr>`+goalKeys.map(k=>`<tr><td>${t(k)}</td><td>${modelText(k)}</td><td>${presets[k].protein} g/kg</td><td>${rangeText(k,'protein')}</td><td>${rangeText(k,'carb')}</td><td>${fatRangeText(k)}</td></tr>`).join('');document.getElementById('bmiTable').innerHTML=`<tr><th>BMI</th><th>${t('classification')}</th></tr><tr><td>&lt;18.5</td><td>${t('underweight')}</td></tr><tr><td>18.5–24.9</td><td>${t('normal')}</td></tr><tr><td>25.0–29.9</td><td>${t('overweight')}</td></tr><tr><td>≥30.0</td><td>${t('obese')}</td></tr>`;document.getElementById('ffmiTable').innerHTML=`<tr><th>${t('maleFfmi')}</th><th>${t('femaleFfmi')}</th><th>${t('reference')}</th></tr>
+ <tr><td>&lt; 18</td><td>&lt; 15</td><td>${currentLang==="zh"?"偏低":currentLang==="en"?"Low":"低め"}</td></tr>
+ <tr><td>18–20</td><td>15–17</td><td>${currentLang==="zh"?"一般範圍":currentLang==="en"?"Average range":"一般範囲"}</td></tr>
+ <tr><td>20–22</td><td>17–19</td><td>${currentLang==="zh"?"良好／訓練者常見":currentLang==="en"?"Good / common among trained users":"良好／トレーニング経験者に多い"}</td></tr>
+ <tr><td>22–25</td><td>19–21</td><td>${currentLang==="zh"?"高肌肉量":currentLang==="en"?"High muscularity":"高い筋肉量"}</td></tr>
+ <tr><td>≥ 25</td><td>≥ 21</td><td>${currentLang==="zh"?"非常高，請確認測量方式":currentLang==="en"?"Very high; verify measurement method":"非常に高い。測定方法を確認"}</td></tr>`;function ft(n,d){return `<tr><th>${currentLang==='zh'?'食物':currentLang==='en'?'Food':'食品'}</th><th>${t('protein')}</th><th>${t('carbs')}</th><th>${t('fat')}</th></tr>`+n.map((x,i)=>`<tr><td>${x}</td><td>${d[i][0]}</td><td>${d[i][1]}</td><td>${d[i][2]}</td></tr>`).join('')}document.getElementById('proteinFoodTable').innerHTML=ft(foods1[currentLang],fd1);document.getElementById('taiwanFoodTable').innerHTML=ft(foods2[currentLang],fd2)}
+renderNativeCards();enhanceResponsiveTables();
+function resetInputs(){['weight','height','age','bodyfat'].forEach(id=>document.getElementById(id).value='');document.getElementById('result').innerHTML='';document.getElementById('printSummary').innerHTML=''}function applyPreset(){let g=document.getElementById('goalSelect').value;document.getElementById('calorieAdjust').value=presets[g].kcal;document.getElementById('calorieNumber').value=presets[g].kcal;document.getElementById('proteinRatio').value=presets[g].protein;document.getElementById('carbRatio').value=presets[g].carb;syncSliderLabels();calc(false)}function syncCalorieNumber(){let v=+document.getElementById('calorieNumber').value;document.getElementById('calorieAdjust').value=Math.max(-1000,Math.min(1000,v));syncSliderLabels()}function syncSliderLabels(){let kcal=+document.getElementById('calorieAdjust').value;document.getElementById('calorieNumber').value=kcal;document.getElementById('calorieSign').textContent=kcal>=0?'+':'−';document.getElementById('calorieValue').textContent=Math.abs(kcal);document.getElementById('proteinValue').textContent=document.getElementById('proteinRatio').value;const fv=document.getElementById('fatValue');if(fv){fv.textContent=document.getElementById('fatRatio').value;}document.getElementById('carbValue').textContent=document.getElementById('carbRatio').value}
+function ffmiEvalLabel(ffmi, gender){
+ if(!ffmi) return t('notEntered');
+ const v=+ffmi;
+ if(gender==='female'){
+  if(v<15) return t('ffmiLowEval');
+  if(v<17) return t('ffmiAvgEval');
+  if(v<19) return t('ffmiGoodEval');
+  if(v<21) return t('ffmiHighEval');
+  return t('ffmiVeryHighEval');
+ }
+ if(v<18) return t('ffmiLowEval');
+ if(v<20) return t('ffmiAvgEval');
+ if(v<22) return t('ffmiGoodEval');
+ if(v<25) return t('ffmiHighEval');
+ return t('ffmiVeryHighEval');
+}
+
+function ffmiLabel(v){if(!v)return t('notEntered');if(v<18)return t('ffmiLow');if(v<20)return t('ffmiAverage');if(v<22)return t('ffmiGood');if(v<25)return t('ffmiHigh');return t('ffmiVeryHigh')}
+function calc(showAlert=true){let userName=(document.getElementById('userName')?.value||'').trim(),wi=+document.getElementById('weight').value,unit=document.getElementById('weightUnit').value,w=unit==='lb'?wi*.45359237:wi,h=+document.getElementById('height').value,age=+document.getElementById('age').value,bf=+document.getElementById('bodyfat').value,waist=+document.getElementById('waist').value;if(!w||!h||!age){if(showAlert)alert(currentLang==='zh'?'請輸入體重、身高、年齡':currentLang==='en'?'Please enter weight, height, and age':'体重、身長、年齢を入力してください');return}let genderVal=document.getElementById('gender').value,s=genderVal==='male'?5:-161,bmr=r(10*w+6.25*h-5*age+s),bmi=(w/((h/100)**2)).toFixed(1),lbm=bf?w*(1-bf/100):0,ffmi=bf?(lbm/((h/100)**2)).toFixed(1):'',whtr=waist?(waist/h).toFixed(2):'',goal=document.getElementById('goalSelect').value,calAdj=+document.getElementById('calorieAdjust').value,pRatio=+document.getElementById('proteinRatio').value,fRatio=+document.getElementById('fatRatio').value,cRatio=+document.getElementById('carbRatio').value,acts={zh:[["無訓練",1.2,1.1],["輕度訓練",1.375,2.2],["中度訓練",1.55,3.3],["高強度訓練",1.725,4.4],["極高強度訓練",1.9,4.4]],en:[["No Training",1.2,1.1],["Light Training",1.375,2.2],["Moderate Training",1.55,3.3],["High-intensity Training",1.725,4.4],["Extreme Training",1.9,4.4]],ja:[["トレーニングなし",1.2,1.1],["軽度トレーニング",1.375,2.2],["中等度トレーニング",1.55,3.3],["高強度トレーニング",1.725,4.4],["極高強度トレーニング",1.9,4.4]]}[currentLang];let out=`<div class="card"><div class="metric-grid"><div class="metric"><b>${metricName('BMI')}</b><span>${bmi}</span><small> kg/m²</small></div><div class="metric"><b>${metricName('BMR')}</b><span>${bmr}</span><small> kcal/day</small></div><div class="metric"><b>${metricName('FFMI')}</b><span>${ffmi||'--'}</span><small> kg/m²</small></div><div class="metric"><b>${metricName('LBM')}</b><span>${lbm?r(lbm):'--'}</span><small> kg</small></div><div class="metric"><b>${metricName('WHtR')}</b><span>${whtr||'--'}</span></div><div class="metric"><b>${t('goal')}</b><span>${t(goal)}</span></div></div><p class="small">${t('ffmiExplain')}：${ffmi?`${ffmi}`:t('notEntered')}</p><p class="small"><b>${t('ffmiEvaluation')}：</b>${ffmi?ffmiEvalLabel(ffmi,genderVal):t('notEntered')}</p></div>`;out+=`<div class="card"><h3>${t('targetMacros')}</h3><p class="small">${t('calorieModelNow')}：TDEE 每日總消耗熱量 ${calAdj>=0?'+':'−'} ${Math.abs(calAdj)} kcal</p><div class="table-wrap macro-table-wrap"><table><tr><th>${t('activity')}</th><th>TDEE 每日總消耗熱量</th><th>${t('targetCalories')}</th><th>${t('protein')}</th><th>${t('carbs')}</th><th>${t('fat')}</th><th>${t('water')}</th></tr>`;let macroCards='';let printRows='';acts.forEach(a=>{let tdee=r(bmr*a[1]),kcal=tdee+calAdj,proteinBase=(document.getElementById('proteinMode')&&document.getElementById('proteinMode').value==='lbm'&&lbm)?lbm:w,pg=r(proteinBase*pRatio),carbFactor=a[2],fatG=r(w*fRatio),rawCarb=(kcal-(pg*4+fatG*9))/4,finalCg=r(Math.max(0,rawCarb)),water=r(tdee*1.5),warn=rawCarb<0?`<br><span class="warning">${t('fatNegative')}</span>`:'';out+=`<tr><th>${a[0]}</th><td>${tdee}</td><td>${kcal}</td><td>${pg}g<br><span class="small">${pRatio} g/kg</span></td><td>${finalCg}g${warn}</td><td>${fatG}g<br><span class="small">${fRatio} g/kg</span></td><td>${water} ml</td></tr>`;macroCards+=`<div class="macro-card"><h4>${a[0]}</h4><div class="macro-row"><b>${metricName('TDEE')}</b><span>${tdee} kcal</span></div><div class="macro-row"><b>${t('targetCalories')}</b><span>${kcal} kcal</span></div><div class="macro-row"><b>${t('protein')}</b><span>${pg} g</span></div><div class="macro-row"><b>${t('carbs')}</b><span>${finalCg} g</span></div><div class="macro-row"><b>${t('fat')}</b><span>${fatG} g</span></div><div class="macro-row"><b>${t('water')}</b><span>${water} ml</span></div>${warn?`<p class="warning">${t('fatNegative')}</p>`:''}</div>`;printRows+=`<tr><th>${a[0]}</th><td>${tdee}</td><td>${kcal}</td><td>${pg}g</td><td>${finalCg}g</td><td>${fatG}g</td><td>${water} ml</td></tr>`});out+='</table></div><div class="macro-cards">'+macroCards+'</div></div>';document.getElementById('result').innerHTML=out;enhanceResponsiveTables();let wp=unit==='lb'?`${wi} lb (${w.toFixed(1)} kg)`:`${wi} kg`;document.getElementById('printSummary').innerHTML=`<h1>${t('reportTitle')}</h1><div class="summary-box">${userName?`<b>${currentLang==='zh'?'姓名':currentLang==='en'?'Name':'氏名'}:</b> ${userName}<br>`:''}<b>${currentLang==='zh'?'體重':currentLang==='en'?'Weight':'体重'}:</b> ${wp}<br><b>${currentLang==='zh'?'身高':currentLang==='en'?'Height':'身長'}:</b> ${h} cm<br><b>${currentLang==='zh'?'年齡':currentLang==='en'?'Age':'年齢'}:</b> ${age} ${t('year')}<br><b>${t('bodyFat')}:</b> ${bf?bf+'%':t('notEntered')}<br><b>${currentLang==='zh'?'腰圍':currentLang==='en'?'Waist':'ウエスト'}:</b> ${waist?waist+' cm':t('notEntered')}<br><b>${metricName('BMI')}:</b> ${bmi} kg/m²<br><b>${t('lbm')}:</b> ${lbm?r(lbm)+' kg':t('notEntered')}<br><b>${t('whtr')}:</b> ${whtr||t('notEntered')}<br><b>${metricName('BMR')}:</b> ${bmr} kcal/day<br><b>${metricName('FFMI')}:</b> ${ffmi?ffmi+' kg/m²':t('notEntered')}<br><b>${t('ffmiEvaluation')}:</b> ${ffmi?ffmiEvalLabel(ffmi,genderVal):t('notEntered')}<br><b>${t('goal')}:</b> ${t(goal)}<br><b>${t('calorieModelNow')}:</b> TDEE 每日總消耗熱量 ${calAdj>=0?'+':'−'} ${Math.abs(calAdj)} kcal</div><h2>${t('targetMacros')}</h2><table><tr><th>${t('activity')}</th><th>TDEE 每日總消耗熱量<br>(kcal/day)</th><th>${t('targetCalories')}<br>(kcal/day)</th><th>${t('protein')}<br>(g/day)</th><th>${t('carbs')}<br>(g/day)</th><th>${t('fat')}<br>(g/day)</th><th>${t('water')}<br>(ml/day)</th></tr>${printRows}</table><h2>${t('activityDef')}</h2><div class="summary-box">${document.getElementById('activityDefList').innerHTML}</div><h2>${t('calorieModel')}</h2><div>${document.getElementById('modelTable').outerHTML}</div>`;lastShareText=`${t('generated')}: BMI ${bmi}, BMR ${bmr} kcal/day, FFMI ${ffmi||t('notCalculated')}, ${t('goal')} ${t(goal)}.`}
+
+
+function buildResultShareText(){
+ const wi=+document.getElementById('weight').value;
+ const unit=document.getElementById('weightUnit').value;
+ const h=+document.getElementById('height').value;
+ const age=+document.getElementById('age').value;
+ if(!wi||!h||!age){
+  return currentLang==='zh'?'請先輸入基本資料並按「計算 / 套用調整」。':currentLang==='en'?'Please enter basic information and calculate first.':'基本情報を入力して計算してください。';
+ }
+ const name=(document.getElementById('userName')?.value||'').trim();
+ const genderVal=document.getElementById('gender').value;
+ const w=unit==='lb'?wi*0.453592:wi;
+ const bf=+document.getElementById('bodyfat').value;
+ const waist=+document.getElementById('waist').value;
+ const goal=document.getElementById('goalSelect').value;
+ const calAdj=+document.getElementById('calorieAdjust').value;
+ const pRatio=+document.getElementById('proteinRatio').value;
+ const fRatio=+document.getElementById('fatRatio').value;
+ const s=genderVal==='male'?5:-161;
+ const bmr=r(10*w+6.25*h-5*age+s);
+ const bmi=(w/((h/100)**2)).toFixed(1);
+ const lbm=bf?w*(1-bf/100):0;
+ const ffmi=bf?(lbm/((h/100)**2)).toFixed(1):'';
+ const whtr=waist?(waist/h).toFixed(2):'';
+ const acts={
+  zh:[['無訓練',1.2],['輕度訓練',1.375],['中度訓練',1.55],['高強度訓練',1.725],['極高強度訓練',1.9]],
+  en:[['No Training',1.2],['Light Training',1.375],['Moderate Training',1.55],['High-intensity Training',1.725],['Extreme Training',1.9]],
+  ja:[['トレーニングなし',1.2],['軽度トレーニング',1.375],['中等度トレーニング',1.55],['高強度トレーニング',1.725],['極高強度トレーニング',1.9]]
+ }[currentLang];
+
+ const label={
+  title:currentLang==='zh'?'NutriCalc 營養與熱量分析結果':currentLang==='en'?'NutriCalc Nutrition and Calorie Analysis':'NutriCalc 栄養・カロリー分析結果',
+  basic:currentLang==='zh'?'基本資料':currentLang==='en'?'Basic information':'基本情報',
+  metrics:currentLang==='zh'?'身體組成指標':currentLang==='en'?'Body composition metrics':'身体組成指標',
+  goal:currentLang==='zh'?'目標':currentLang==='en'?'Goal':'目標',
+  name:currentLang==='zh'?'姓名':currentLang==='en'?'Name':'氏名',
+  weight:currentLang==='zh'?'體重':currentLang==='en'?'Weight':'体重',
+  height:currentLang==='zh'?'身高':currentLang==='en'?'Height':'身長',
+  age:currentLang==='zh'?'年齡':currentLang==='en'?'Age':'年齢',
+  bodyfat:currentLang==='zh'?'體脂率':currentLang==='en'?'Body fat':'体脂肪率',
+  waist:currentLang==='zh'?'腰圍':currentLang==='en'?'Waist':'ウエスト',
+  bmi:currentLang==='zh'?'BMI 身體質量指數':currentLang==='en'?'BMI Body Mass Index':'BMI 体格指数',
+  bmr:currentLang==='zh'?'BMR 基礎代謝率':currentLang==='en'?'BMR Basal Metabolic Rate':'BMR 基礎代謝量',
+  ffmi:currentLang==='zh'?'FFMI 去脂體重指數':currentLang==='en'?'FFMI Fat-Free Mass Index':'FFMI 除脂肪量指数',
+  lbm:currentLang==='zh'?'LBM 去脂體重':currentLang==='en'?'LBM Lean Body Mass':'LBM 除脂肪量',
+  whtr:currentLang==='zh'?'WHtR 腰高比':currentLang==='en'?'WHtR Waist-to-Height Ratio':'WHtR ウエスト身長比',
+  tdee:currentLang==='zh'?'TDEE 每日總消耗熱量':currentLang==='en'?'TDEE Total Daily Energy Expenditure':'TDEE 1日の総消費カロリー',
+  targetCalories:t('targetCalories'),
+  protein:t('protein'),
+  carbs:t('carbs'),
+  fat:t('fat'),
+  water:t('water')
+ };
+
+ const lines=[];
+ const sep='────────────';
+ const bigSep='════════════';
+
+ lines.push(label.title);
+ lines.push('');
+ lines.push(sep);
+ lines.push(label.basic);
+ lines.push(sep);
+ if(name) lines.push(`${label.name}：${name}`);
+ lines.push(`${label.weight}：${wi} ${unit}`);
+ lines.push(`${label.height}：${h} cm`);
+ lines.push(`${label.age}：${age}`);
+ if(bf) lines.push(`${label.bodyfat}：${bf}%`);
+ if(waist) lines.push(`${label.waist}：${waist} cm`);
+
+ lines.push('');
+ lines.push(sep);
+ lines.push(label.metrics);
+ lines.push(sep);
+ lines.push(`${label.bmi}：${bmi} kg/m²`);
+ lines.push(`${label.bmr}：${bmr} kcal/day`);
+ lines.push(`${label.ffmi}：${ffmi?ffmi+' kg/m²':t('notEntered')}`);
+ if(ffmi) lines.push(`${t('ffmiEvaluation')}：${ffmiEvalLabel(ffmi,genderVal)}`);
+ lines.push(`${label.lbm}：${lbm?r(lbm)+' kg':t('notEntered')}`);
+ lines.push(`${label.whtr}：${whtr||t('notEntered')}`);
+
+ lines.push('');
+ lines.push(sep);
+ lines.push(label.goal);
+ lines.push(sep);
+ lines.push(`${t(goal)}`);
+
+ acts.forEach(a=>{
+  const tdee=r(bmr*a[1]);
+  const kcal=r(tdee+calAdj);
+  const pg=r(w*pRatio);
+  const fatG=r(w*fRatio);
+  const rawCarb=(kcal-(pg*4+fatG*9))/4;
+  const finalCg=r(Math.max(0,rawCarb));
+  const water=r(tdee*1.5);
+
+  lines.push('');
+  lines.push(bigSep);
+  lines.push(a[0]);
+  lines.push(bigSep);
+  lines.push(`${label.tdee}：${tdee} kcal`);
+  lines.push(`${label.targetCalories}：${kcal} kcal`);
+  lines.push(`${label.protein}：${pg} g`);
+  lines.push(`${label.carbs}：${finalCg} g`);
+  lines.push(`${label.fat}：${fatG} g`);
+  lines.push(`${label.water}：${water} ml`);
+  if(rawCarb<0) lines.push(`⚠ ${t('fatNegative')}`);
+ });
+
+ return lines.join('\n').replace(/NutriCalc v[\s\S]*?Contact:.*?(\n|$)/g,'').replace(/PayPal 備用網址[\s\S]*?(\n|$)/g,'').trim();
+}
+
+async function shareResult(){
+ const text=buildResultShareText();
+ if(navigator.share){
+  try{await navigator.share({title:'NutriCalc',text:text});return;}catch(e){}
+ }
+ try{
+  await navigator.clipboard.writeText(text);
+  alert(currentLang==='zh'?'計算結果已複製，可貼到 LINE 或訊息中。':currentLang==='en'?'Result copied. You can paste it into LINE or a message.':'計算結果をコピーしました。LINEやメッセージに貼り付けできます。');
+ }catch(e){
+  prompt(currentLang==='zh'?'請複製以下結果：':currentLang==='en'?'Copy the result below:':'以下の結果をコピーしてください：', text);
+ }
+}
+function shareLine(){
+ const text=buildResultShareText();
+ const url='https://line.me/R/msg/text/?'+encodeURIComponent(text);
+ window.open(url,'_blank');
+}
+
+function parseQuickImport(){
+ const txt=(document.getElementById('quickImport')?.value||'').toLowerCase();
+ function find(patterns){
+  for(const p of patterns){
+   const m=txt.match(p);
+   if(m) return parseFloat(m[1]);
+  }
+  return null;
+ }
+ const nameMatch=txt.match(/(?:姓名|名前|氏名|name)\s*[:：]?\s*([^\n,，]+)/);const weight=find([/(?:體重|体重|weight)\s*[:：]?\s*(\d+(?:\.\d+)?)/]);
+ const height=find([/(?:身高|身長|height)\s*[:：]?\s*(\d+(?:\.\d+)?)/]);
+ const age=find([/(?:年齡|年齢|age)\s*[:：]?\s*(\d+(?:\.\d+)?)/]);
+ const bf=find([/(?:體脂率|體脂|体脂肪率|body\s*fat|bf)\s*[:：]?\s*(\d+(?:\.\d+)?)/]);
+ const waist=find([/(?:腰圍|ウエスト|waist)\s*[:：]?\s*(\d+(?:\.\d+)?)/]);
+ if(nameMatch) document.getElementById('userName').value=nameMatch[1].trim();if(weight!==null) document.getElementById('weight').value=weight;
+ if(height!==null) document.getElementById('height').value=height;
+ if(age!==null) document.getElementById('age').value=age;
+ if(bf!==null) document.getElementById('bodyfat').value=bf;
+ if(waist!==null) document.getElementById('waist').value=waist;
+ calc(false);
+}
+
+
+async function copyPayPalUrl(){
+ const url='https://www.paypal.com/paypalme/tsuwu827';
+ try{
+  await navigator.clipboard.writeText(url);
+  alert(currentLang==='zh'?'PayPal 網址已複製':currentLang==='en'?'PayPal URL copied':'PayPal URLをコピーしました');
+ }catch(e){
+  prompt(currentLang==='zh'?'請複製 PayPal 網址':currentLang==='en'?'Copy the PayPal URL':'PayPal URLをコピーしてください',url);
+ }
+}
+
+setLang('zh');
+</script>
+<div class="card feedback-section">
+<h3 data-i18n="feedbackTitle">建議與回饋</h3>
+<p data-i18n="feedbackText">如果您對 NutriCalc 有建議、錯誤回報或希望新增功能，歡迎來信。</p>
+<p><a href="mailto:nutricalcpal@gmail.com?subject=NutriCalc%20Feedback">nutricalcpal@gmail.com</a></p>
+</div>
+
+
+<div class="card footer-section">
+<p class="small"><b>NutriCalc v4.0.9 Native Mobile Cards Edition</b><br>Last Updated: 2026-06<br>Contact: <a href="mailto:nutricalcpal@gmail.com">nutricalcpal@gmail.com</a></p>
+</div>
+
+</body></html>
